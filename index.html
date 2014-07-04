@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" href="css/reveal.min.css">
-    <link rel="stylesheet" href="css/theme/sky.css" id="theme">
+    <link rel="stylesheet" href="css/theme/fasterize.css" id="theme">
 
     <!-- For syntax highlighting -->
     <link rel="stylesheet" href="lib/css/zenburn.css">
@@ -51,45 +51,18 @@
 
      .reveal .icon-bar a {
        text-decoration: none;
-       color: rgba(74, 80, 86, 0.5);
+       color: #CCC;
        font-weight: 300;
      }
 
      .reveal .icon-bar a:hover {
-       color: #4a5056;
+       color: #CCC;
        text-shadow: 0px -1px 2px rgba(255, 255, 255, 0.5);
        text-decoration: underline;
      }
      .reveal .icon-bar a span {
        padding-left: 0.25em;
        padding-right: 1em;
-     }
-
-     .reveal img:not(.plain) {
-       margin: 30px 0 0 0;
-       background: rgba(255,255,255,0.12);
-       border: 4px solid #eee;
-
-       -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-       -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-       box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-
-       -webkit-transition: all .11s linear;
-       -moz-transition: all .11s linear;
-       -o-transition: all .11s linear;
-       transition: all .11s linear;
-     }
-
-     .reveal img.plain, .reveal img.plain:hover {
-       border: none;
-       box-shadow: none;
-       background: none;
-     }
-
-     .reveal a.image:hover img:not(.plain), .reveal a.image:hover img.plain {
-       background: none;
-       box-shadow: none;
-       -webkit-box-shadow: none;
      }
 
      .reveal pre code {
@@ -126,10 +99,7 @@
      .reveal h2 {
        margin-bottom: 1em;
      }
-     
-     body {
-       background: -webkit-radial-gradient(center, circle cover, #f7fbfc 0%, #9CA0A2 100%)
-     }
+
     </style>
 
   </head>
@@ -165,7 +135,7 @@
         <section data-transition="linear">
           <h2>Fasterize deployment</h2>
           <ul>
-            <li>Deploy fully automated with Chef & Capistrano</li>
+            <li>Fully automated deployment with Chef & Capistrano</li>
             <li>18 roles Chef (Front, Cache, Proxy, Storage, API, ...)</li>
             <li>&gt; 30 mins to apply Chef on ~30 hosts</li>
             <li>Orchestration with Capistrano tasks</li>
@@ -191,7 +161,7 @@
             <h2 style="margin-bottom: 0.1em">Build of Docker images</h2>
             <img src="assets/docker_images_build.png">
           </section>
-          
+
           <section data-transition="linear">
             <h2>Dockerfiles</h2>
             <p>Reuse our Chef cookbooks to build Docker images</p>
@@ -201,17 +171,17 @@ FROM docker.fasterize.com/fasterize-base
 ADD . /fasterize/chef-repo
 
 RUN cd /fasterize/chef-repo && chef-solo -c lib/chef/solo.rb Cache
-       
+
 # SSHD
 EXPOSE 22
 
 # Nginx
 EXPOSE 80
 
-CMD circusd /etc/circus/circus.conf              
+CMD circusd /etc/circus/circus.conf
             </code></pre>
           </section>
-          
+
           <section data-transition="linear">
             <h2>Intermediates images</h2>
             <ul>
@@ -244,9 +214,9 @@ CMD circusd /etc/circus/circus.conf
               </ul>
             </ul>
           </section>
-          
+
           <section data-transition="linear">
-            <h2>Cleanup <code>RUN</code></h2>
+            <h2>RUN Cleanup</h2>
             <b>WRONG</b>: does not changed image size:
             <pre><code data-trim contenteditable class="bash">
 RUN cd /fasterize/chef-repo && chef-solo -c lib/chef/solo.rb Cache
@@ -271,7 +241,7 @@ RUN cd /fasterize/chef-repo && chef-solo -c lib/chef/solo.rb Cache \
      rm -rf /var/chef/cache)
             </code></pre>
           </section>
-          
+
           <section data-transition="linear">
             <h2>Docker images size optimization</h2>
             <ul>
@@ -279,9 +249,9 @@ RUN cd /fasterize/chef-repo && chef-solo -c lib/chef/solo.rb Cache \
               <li>8 Docker images like <code>fasterize-cache</code> ~ <code> 10.2Go</code></li>
               <ul>
                 <li><b>export then re-import</b>: <code>832 Mo * 8 > 6.5 Go</code></li>
-                <li><b>cleanup commands</b>: <code>1 Go * 8 > 8 Go</code></li>
-                <li><b>export + cleanup commands</b>: <code>754 Mo * 8 > 6 Go</code></li>
-                <li><b>exported fasterize-base + cleanup commands</b>: <code>746 Mo + (815 Mo - 746 Mo) * 8 > 1.2 Go</code></li>
+                <li><b>cleanup</b>: <code>1 Go * 8 > 8 Go</code></li>
+                <li><b>export + cleanup</b>: <code>754 Mo * 8 > 6 Go</code></li>
+                <li><b>exported fasterize-base + cleanup</b>: <code>746 Mo + (815 Mo - 746 Mo) * 8 > 1.2 Go</code></li>
               </ul>
             </ul>
           </section>
@@ -292,7 +262,7 @@ RUN cd /fasterize/chef-repo && chef-solo -c lib/chef/solo.rb Cache \
 describe "fasterize-cache" do
   before :all { @container = start_docker_container }
   after :all { @container.kill }
-              
+
   describe package('nginx') do
     it { should be_installed }
   end
@@ -308,7 +278,7 @@ describe "fasterize-cache" do
 end
             </code></pre>
           </section>
-          
+
         </section>
 
         <section data-transition="linear">
@@ -316,7 +286,7 @@ end
             <h2>Use of Docker on our dev environment</h2>
             <img src="assets/fasterize_docker_dev.png">
           </section>
-          
+
           <section data-transition="linear">
             <h2>Use of Docker on our dev environment</h2>
             <ul>

@@ -1,0 +1,52 @@
+/**
+ * Inspired by Sky theme for reveal.js.
+ *
+ * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
+ */
+
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+
+
+// Include theme-specific fonts
+@import url(https://fonts.googleapis.com/css?family=Quicksand:400,700,400italic,700italic);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+
+
+// Override theme settings (see ../template/settings.scss)
+$mainFont: 'Open Sans', sans-serif;
+$mainColor: #FFF;
+$headingFont: 'Quicksand', sans-serif;
+$headingColor: #FFF;
+$headingLetterSpacing: -0.08em;
+$headingTextShadow: none;
+$backgroundColor: #191970;
+$linkColor: #CCC;
+$linkcolorhover: lighten( $linkColor, 20% );
+$selectionBackgroundColor: #134674;
+
+// Fix links so they are not cut off
+.reveal a:not(.image) {
+	line-height: 1.3em;
+}
+
+// Background generator
+@mixin bodyBackground() {
+  @include vertical-gradient(#191970, #5f9ea0);
+}
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
+
+.reveal section img {
+	margin: 15px 0px;
+	background: rgba(255,255,255,0.0);
+	border: 0px solid $mainColor;
+
+	box-shadow: 0 0 0px rgba(0, 0, 0, 0.0);
+}
