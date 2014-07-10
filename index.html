@@ -143,17 +143,35 @@
         </section>
 
         <section data-transition="linear">
-          <h2>Current Fasterize dev environment</h2>
-          <img src="assets/fasterize_dev.png">
-        </section>
-
-        <section data-transition="linear">
           <h2>Why Docker at Fasterize?</h2>
           <ul>
             <li>Applying Chef is slow</li>
             <li>Creating a new dev environment from scratch is way too long</li>
             <li>Chef fails regularly because of external dependencies (npmjs, Github, rubygems, ...)</li>
           </ul>
+        </section>
+
+        <section data-transition="linear">
+          <h2>Current Fasterize dev environment</h2>
+          <img src="assets/fasterize_dev.png">
+        </section>
+
+        <section data-transition="linear">
+          <section data-transition="linear">
+            <h2>Use of Docker on our dev environment</h2>
+            <img src="assets/fasterize_docker_dev.png">
+          </section>
+
+          <section data-transition="linear">
+            <h2>Use of Docker on our dev environment</h2>
+            <ul>
+              <li>1 VM to host most containers with multiples hardcoded IP (same IP as previous dev environment)</li>
+              <li><a href="https://circus.readthedocs.org">Circus</a> as process supervisor</li>
+              <li>Proxy, Worker and Test used as simple processes on our dev env, as local Docker containers on CI</li>
+              <li><a href="http://orchardup.github.io/fig/">Fig.io</a> to run containers</li>
+              <li><b>Beware of Chef facts (Nb CPU, memory, ...) might not match between build and run</b></li>
+            </ul>
+          </section>
         </section>
 
         <section data-transition="linear">
@@ -186,17 +204,19 @@ CMD circusd /etc/circus/circus.conf
             <h2>Intermediates images</h2>
             <ul>
               <li>Using Chef to build Docker image breaks Docker cache</li>
-              <li>To limit Docker images size, creating intermediates images:</li>
+              <li>To limit Docker images size and build time, we use intermediates images:</li>
               <ul>
                 <li><b>init-chef</b>: install Chef</li>
-                <li><b>fasterize-base</b>: apply Chef Base role</li>
                 <ul>
-                  <li><b>fasterize-cache</b>: apply Chef Cache role</li>
-                  <li><b>fasterize-proxy</b>: apply Chef Proxy role</li>
+                  <li><b>fasterize-base</b>: apply Chef Base role</li>
                   <ul>
-                    <li><b>fasterize-proxy-app</b>: deploy Proxy application</li>
+                    <li><b>fasterize-cache</b>: apply Chef Cache role</li>
+                    <li><b>fasterize-proxy</b>: apply Chef Proxy role</li>
+                    <ul>
+                      <li><b>fasterize-proxy-app</b>: deploy Proxy application</li>
+                    </ul>
+                    <li>...</li>
                   </ul>
-                  <li>...</li>
                 </ul>
               </ul>
             </ul>
@@ -279,24 +299,6 @@ end
             </code></pre>
           </section>
 
-        </section>
-
-        <section data-transition="linear">
-          <section data-transition="linear">
-            <h2>Use of Docker on our dev environment</h2>
-            <img src="assets/fasterize_docker_dev.png">
-          </section>
-
-          <section data-transition="linear">
-            <h2>Use of Docker on our dev environment</h2>
-            <ul>
-              <li>1 VM to host most containers with multiples hardcoded IP (same IP as previous dev environment)</li>
-              <li><a href="https://circus.readthedocs.org">Circus</a> as process supervisor</li>
-              <li>Proxy, Worker and Test used as simple processes on our dev env, as local Docker containers on CI</li>
-              <li><a href="http://orchardup.github.io/fig/">Fig.io</a> to run containers</li>
-              <li><b>Beware of Chef facts (Nb CPU, memory, ...) might not match between build and run</b></li>
-            </ul>
-          </section>
         </section>
 
         <section data-transition="linear">
